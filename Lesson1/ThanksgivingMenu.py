@@ -1,0 +1,6 @@
+print("Smoked Turkey!")
+print("Cornbread Dressing")
+print("Mac and Cheese")
+print("Homemade Cranberry Sauce")
+print("Giblet Gravy")
+print("Pecan Pie")
