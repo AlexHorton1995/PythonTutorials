@@ -1,12 +1,15 @@
 #!/usr/bin/python3
 
-from datetime import date
-import os
+#libs
+import datetime #date/time
+from datetime import date #date lib
+import os #access shutdown command
+import pyautogui  #lib for writing to terminal
+import time #lib to get the current time of day and date
+
+#libs for the smtp email
 import smtplib
-import datetime
-import pyautogui 
-import time
-from email.mime.text import MIMEText
+from email.mime.text import MIMEText 
 from email.mime.multipart import MIMEMultipart
 
 #get the current day, time
@@ -32,7 +35,6 @@ server.login(email,pas)
 # Now we use the MIME module to structure our message.
 msg = MIMEMultipart()
 msg['From'] = email
-# msg['To'] = sms_gateway
 
 # Make sure you add a new line in the subject
 # Make sure you also add new lines to your body
