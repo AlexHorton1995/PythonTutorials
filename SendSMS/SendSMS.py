@@ -30,10 +30,10 @@ elif (now.hour >= 7 and now.hour <= 15) and (now.day >= 1 and now.day <=6):
 else:
     canLogin = False
 
-email = "<replaceemail@email.com>" #replace with the credentialed email here
-pas = "GMAILAPPPASSWORD" #get app password from google security settings
+email = "email@email.com" #put your email here
+pas = "app password here" #put app password here
 
-sms_gateway = ["EMAILONE@EMAIL.COM","EMAIL2@EMAIL.COM"] #put the emails you want to send to here
+sms_gateway = ["sms@smsprovider.com","email@email.com"]
 
 # The server we use to send emails in our case it will be gmail but every email provider has a different smtp 
 # and port is also provided by the email provider.
@@ -80,12 +80,11 @@ server.quit()
 
 # finally, shut down the computer
 if isAdmin:
-    pyautogui.typewrite("clear")
-    time.sleep(2)
     os.system("gnome-terminal -e /bin/bash")
     time.sleep(1)
     pyautogui.typewrite("gedit")
     pyautogui.press("enter")
+    time.sleep(2)
     pyautogui.typewrite("Test completed, this is where the computer would shut down.")
     pyautogui.press("enter")
 elif not canLogin:
