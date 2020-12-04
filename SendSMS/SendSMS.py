@@ -12,21 +12,37 @@ import smtplib
 from email.mime.text import MIMEText 
 from email.mime.multipart import MIMEMultipart
 
-#get the current day, time
+#lib to get the current user
+import getpass
+
+#get the current day, time, and user
 now = datetime.datetime.now()
-theDay = now.day
+user = getpass.getuser()
 
+canLogin = False
+isAdmin = False
 
-email = "<youremail@email.com>"
-pas = "<applicationpassword>"
+if user == "admin":
+    isAdmin = True
+    canLogin = True
+elif (now.hour >= 7 and now.hour <= 15) and (now.day >= 1 and now.day <=6):
+    canLogin = True
+else:
+    canLogin = False
 
-sms_gateway = ["<smsemail@sms.com>","<ccdEmail@email.com>"]
+email = "<replaceemail@email.com>" #replace with the credentialed email here
+pas = "GMAILAPPPASSWORD" #get app password from google security settings
+
+sms_gateway = ["EMAILONE@EMAIL.COM","EMAIL2@EMAIL.COM"] #put the emails you want to send to here
+
 # The server we use to send emails in our case it will be gmail but every email provider has a different smtp 
 # and port is also provided by the email provider.
 smtp = "smtp.gmail.com" 
 port = 587
+
 # This will start our email server
 server = smtplib.SMTP(smtp,port)
+
 # Starting the server
 server.starttls()
 # Now we need to login
@@ -41,12 +57,17 @@ msg['From'] = email
 # and then attach that body furthermore you can also send html content.
 
 #permissions to log into the computer during a school day
-if (now.hour >= 8 and now.hour <= 15) and (now.day >= 1 and now.day <=6):
-    msg['Subject'] = "Rhiana has logged into the laptop for school\n"
-    body = "Rhiana logged in at " + str(now.hour).zfill(2) + ":" + str(now.minute).zfill(2) + "\n"
+if not isAdmin:
+    if canLogin:
+        msg['Subject'] = "Kid has logged into the laptop for school\n"
+        body = "Kid logged in at " + str(now.hour).zfill(2) + ":" + str(now.minute).zfill(2) + "\n"
+    else:
+        msg['Subject'] = "Kid has logged into the laptop!!!\n"
+        body = "We can see you, on the laptop. You logged in at " + str(now.hour).zfill(2) + ":" + str(now.minute).zfill(2) + " on the laptop.\n Shutting down computer now....\n"
 else:
-    msg['Subject'] = "Rhiana has logged into the laptop!!!\n"
-    body = "We can see you, on the laptop. You logged in at " + str(now.hour).zfill(2) + ":" + str(now.minute).zfill(2) + " on the laptop.\n Shutting down computer now....\n"
+    msg['Subject'] = "Testing!\n"
+    body = "Testing Body of email at " + str(now.hour).zfill(2) + ":" + str(now.minute).zfill(2) + " on the laptop.\n Shutting down computer now....\n"
+
 
 msg.attach(MIMEText(body, 'plain'))
 
@@ -58,25 +79,44 @@ server.sendmail(email,sms_gateway,sms)
 server.quit()
 
 # finally, shut down the computer
-os.system("x-terminal-emulator -e /bin/bash")
-time.sleep(2)
-pyautogui.typewrite("echo Congrats! You did exactly what we thought you were going to do!") 
-pyautogui.press("enter")
-time.sleep(2)
-pyautogui.typewrite("echo Guess what is about to happen?") 
-pyautogui.press("enter")
-time.sleep(2)
-pyautogui.typewrite("echo Emailing parents...") 
-pyautogui.press("enter")
-time.sleep(2)
-pyautogui.typewrite("echo Texting Daddy...") 
-pyautogui.press("enter")
-time.sleep(2)
-pyautogui.typewrite("echo And now we're shutting down the computer...") 
-pyautogui.press("enter")
-time.sleep(2)
-pyautogui.typewrite("echo You are so busted...") 
-pyautogui.press("enter")
-time.sleep(1)
-
-os.system("shutdown now")
+if isAdmin:
+    pyautogui.typewrite("clear")
+    time.sleep(2)
+    os.system("gnome-terminal -e /bin/bash")
+    time.sleep(1)
+    pyautogui.typewrite("gedit")
+    pyautogui.press("enter")
+    pyautogui.typewrite("Test completed, this is where the computer would shut down.")
+    pyautogui.press("enter")
+elif not canLogin:
+    time.sleep(2)
+    os.system("gnome-terminal -e /bin/bash")
+    time.sleep(1)
+    pyautogui.typewrite("gedit")
+    pyautogui.press("enter")
+    time.sleep(2)
+    pyautogui.typewrite("Congrats! You did exactly what we thought you were going to do!") 
+    pyautogui.press("enter")
+    time.sleep(2)
+    pyautogui.typewrite("Guess what is about to happen?") 
+    pyautogui.press("enter")
+    time.sleep(2)
+    pyautogui.typewrite("Let's just send an email to your parents...") 
+    pyautogui.press("enter")
+    time.sleep(2)
+    pyautogui.typewrite("We'll also text Daddy...") 
+    pyautogui.press("enter")
+    time.sleep(3)
+    pyautogui.typewrite("And now we're shutting down the computer...") 
+    pyautogui.press("enter")
+    time.sleep(5)
+    pyautogui.typewrite("You are so busted...") 
+    pyautogui.press("enter")
+    time.sleep(3)
+    pyautogui.typewrite("BUH BYE!!!") 
+    pyautogui.press("enter")
+    time.sleep(2)
+    os.system("shutdown now")
+else:
+    os.system("/usr/bin/teams %U")
+    print("Allowed...")
